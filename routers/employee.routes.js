@@ -40,7 +40,7 @@ employeeRouter.get('/employee/:id', async(req,res)=>{
     }
 })
 
-employeeRouter.update('/employee/:id', async(req,res)=>{
+employeeRouter.put('/employee/:id', async(req,res)=>{
     try {
         const result = await employee.updateEmployeeDetails(req)
         res.status(statusCode.OK).json(result) 

@@ -8,25 +8,30 @@ const prisma = new PrismaClient();
 const addEmployee = async(req,res)=>{
     try {
         await prisma.$connect()
-        const {name, age, department, salary} = req.body
-        const result = await prisma.employee.create({
+        // const {name, age, department, salary} = req.body
+        // console.log(name, age,department,salary, "console")
+        await prisma.user.create({
             data:{
-                name:name,
-                age:age,
-                department:department,
-                salary:salary
-            }
+                name:req.body.name,
+                age:req.body.age,
+                department:req.body.department,
+                salary:req.body.salary
+            },
         })
+        let result = await prisma.user.findMany()
+
         return result
     } catch(err){
         console.error(err)
+    } finally {
+        await prisma.$disconnect()
     }
 }
 
 const getEmployee =async(req,res)=>{
     try {
         await prisma.$connect()
-        const result = await prisma.employee.findMany({ 
+        const result = await prisma.user.findMany({ 
         select: {
             id: true,
             name: true,
@@ -38,6 +43,8 @@ const getEmployee =async(req,res)=>{
         return result
     } catch(err){
         console.error(err)
+    } finally {
+        await prisma.$disconnect()
     }
 }
 
@@ -46,7 +53,7 @@ const getEmployeeById = async(req,res)=>{
     try{
         await prisma.$connect()
 
-        const result = await prisma.employee.findUnique({
+        const result = await prisma.user.findUnique({
             where: {id: req.params.id},
             select: {
                 id: true,
@@ -59,6 +66,8 @@ const getEmployeeById = async(req,res)=>{
         return result
     } catch(err){
         console.error(err)
+    } finally {
+        await prisma.$disconnect()
     }
 }
 
@@ -68,7 +77,7 @@ const updateEmployeeDetails = async(req,res) =>{
         await prisma.$connect()
 
         const {name, age, department, salary} = req.body
-        const resut = await prisma.employee.update({
+        const resut = await prisma.user.update({
             where: {
               id: req.params.id,
             },
@@ -83,6 +92,8 @@ const updateEmployeeDetails = async(req,res) =>{
           return resut
     } catch(err){
         console.log(err)
+    } finally {
+        await prisma.$disconnect()
     }
 } 
 
@@ -91,7 +102,7 @@ const deleteEmployeeDetails = async(req,res) =>{
     try {
         await prisma.$connect()
 
-        const result = await prisma.employee.delete({
+        const result = await prisma.user.delete({
             where: {
               id: req.params.id,
             }
